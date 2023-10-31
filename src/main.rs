@@ -1,3 +1,4 @@
+use std::collections::LinkedList;
 use std::env;
 use std::io::{BufRead, BufReader, Write};
 use std::net::{TcpListener, TcpStream};
@@ -29,3 +30,31 @@ fn handle_connection(mut stream: TcpStream) {
     Hello world\r\n\r\n";
     stream.write_all(response.as_bytes()).unwrap();
 }
+
+pub trait ChannelPipeline {
+    fn add(channel_handler: Box<dyn ChannelHandler>);
+}
+
+pub struct DefaultChannelPipeline {
+    channel_handlers: LinkedList<Box<dyn ChannelHandler>>
+}
+
+impl ChannelPipeline for DefaultChannelPipeline {
+    fn add(channel_handler: Box<dyn ChannelHandler>) {
+        channel_handler.add(channel_handler);
+    }
+}
+
+pub trait ChannelHandler {
+
+}
+
+pub struct DefaultChannelHandler {
+
+}
+
+impl ChannelHandler for DefaultChannelHandler {
+
+}
+
+
